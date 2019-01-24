@@ -111,7 +111,7 @@ final class QaServiceImpl extends AbstractService implements QaService {
     // Add a default counter to the blockchain.
     createCounter(DEFAULT_COUNTER_NAME, fork);
 
-    // Add an afterCommit counter that will be incremented after each block commited event.
+    // Add an afterCommit counter that will be incremented after each block committed event.
     createCounter(AFTER_COMMIT_COUNTER_NAME, fork);
 
     return Optional.of(INITIAL_SERVICE_CONFIGURATION);
@@ -297,10 +297,18 @@ final class QaServiceImpl extends AbstractService implements QaService {
   }
 
   @Override
-  public Block getBlock(long height) {
+  public Block getBlockByHeight(long height) {
     return node.withSnapshot((view) -> {
       Blockchain blockchain = Blockchain.newInstance(view);
       return blockchain.getBlock(height);
+    });
+  }
+
+  @Override
+  public Optional<Block> getBlockById(HashCode blockId) {
+    return node.withSnapshot((view) -> {
+      Blockchain blockchain = Blockchain.newInstance(view);
+      return blockchain.findBlock(blockId);
     });
   }
 
