@@ -27,7 +27,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   with the following content:
   ```toml
   services = ["configuration", "time"]
-  ``` (TODO: number of PR)
+  ``` (#667)
 
 ### Changed
 - `com.exonum.binding.storage.indices.MapEntry` moved to package
