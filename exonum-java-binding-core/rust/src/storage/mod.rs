@@ -21,6 +21,7 @@ mod map_index;
 mod memorydb;
 mod proof_list_index;
 mod proof_map_index;
+mod time_schema;
 mod value_set_index;
 
 pub use self::core_schema::*;
@@ -33,4 +34,5 @@ pub use self::map_index::*;
 pub use self::memorydb::*;
 pub use self::proof_list_index::*;
 pub use self::proof_map_index::*;
+pub use self::time_schema::*;
 pub use self::value_set_index::*;
