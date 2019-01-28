@@ -18,7 +18,6 @@
 package com.exonum.binding.common.serialization;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 import java.time.ZonedDateTime;
 
 enum ZonedDateTimeSerializer implements Serializer<ZonedDateTime> {

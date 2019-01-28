@@ -26,21 +26,18 @@ import com.exonum.binding.proxy.ProxyDestructor;
 import com.exonum.binding.storage.database.View;
 import com.exonum.binding.storage.indices.EntryIndexProxy;
 import com.exonum.binding.storage.indices.ProofMapIndexProxy;
-
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import java.time.ZonedDateTime;
-import java.util.Collections;
 import java.util.List;
 
 public class TimeSchemaProxy implements TimeSchema {
 
-  private static final Serializer<PublicKey> publicKeySerializer = StandardSerializers.publicKey();
-  private static final Serializer<ZonedDateTime> zonedDateTimeSerializer = StandardSerializers.zonedDateTime();
+  private static final Serializer<PublicKey> PUBLIC_KEY_SERIALIZER = StandardSerializers.publicKey();
+  private static final Serializer<ZonedDateTime> ZONED_DATE_TIME_SERIALIZER = StandardSerializers.zonedDateTime();
 
-  private final NativeHandle nativeHandle;
   private final View dbView;
 
-  private TimeSchemaProxy(NativeHandle nativeHandle, View dbView) {
-    this.nativeHandle = nativeHandle;
+  private TimeSchemaProxy(View dbView) {
     this.dbView = dbView;
   }
 
@@ -55,23 +52,23 @@ public class TimeSchemaProxy implements TimeSchema {
     ProxyDestructor.newRegistered(cleaner, nativeHandle, TimeSchemaProxy.class,
         TimeSchemaProxy::nativeFree);
 
-    return new TimeSchemaProxy(nativeHandle, dbView);
+    return new TimeSchemaProxy(dbView);
   }
 
   @Override
   public EntryIndexProxy<ZonedDateTime> getTime() {
-    return EntryIndexProxy.newInstance(TimeIndex.TIME, dbView, zonedDateTimeSerializer);
+    return EntryIndexProxy.newInstance(TimeIndex.TIME, dbView, ZONED_DATE_TIME_SERIALIZER);
   }
 
   @Override
   public ProofMapIndexProxy<PublicKey, ZonedDateTime> getValidatorsTimes() {
-    return ProofMapIndexProxy.newInstance(TimeIndex.VALIDATORS_TIMES, dbView, publicKeySerializer,
-        zonedDateTimeSerializer);
+    return ProofMapIndexProxy.newInstance(TimeIndex.VALIDATORS_TIMES, dbView, PUBLIC_KEY_SERIALIZER,
+        ZONED_DATE_TIME_SERIALIZER);
   }
 
   @Override
   public List<HashCode> getStateHashes() {
-    return Collections.emptyList();
+    throw new NotImplementedException();
   }
 
   private static native long nativeCreate(long viewNativeHandle);

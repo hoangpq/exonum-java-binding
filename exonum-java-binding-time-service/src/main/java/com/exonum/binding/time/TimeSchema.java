@@ -21,7 +21,6 @@ import com.exonum.binding.common.hash.HashCode;
 import com.exonum.binding.service.Schema;
 import com.exonum.binding.storage.indices.EntryIndexProxy;
 import com.exonum.binding.storage.indices.ProofMapIndexProxy;
-
 import java.time.ZonedDateTime;
 import java.util.List;
 
@@ -40,5 +39,6 @@ public interface TimeSchema extends Schema {
    */
   ProofMapIndexProxy<PublicKey, ZonedDateTime> getValidatorsTimes();
 
+  @Override
   List<HashCode> getStateHashes();
 }
