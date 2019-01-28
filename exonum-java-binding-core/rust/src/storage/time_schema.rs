@@ -14,23 +14,17 @@
 
 use exonum::storage::{Fork, Snapshot};
 use exonum_time::schema::TimeSchema;
-use jni::{
-    objects::{JClass, JObject},
-    sys::{jobjectArray, jsize},
-    JNIEnv,
-};
-use std::{panic, ptr};
+use jni::{objects::JClass, JNIEnv};
+use std::panic;
 use storage::db::{View, ViewRef};
 use utils::{self, Handle};
-
-const BYTE_ARRAY: &str = "[B";
 
 enum SchemaType {
     SnapshotSchema(TimeSchema<&'static Snapshot>),
     ForkSchema(TimeSchema<&'static mut Fork>),
 }
 
-/// Returns pointer to created CoreSchemaProxy object
+/// Returns pointer to created TimeSchemaProxy object
 #[no_mangle]
 pub extern "system" fn Java_com_exonum_binding_time_TimeSchemaProxy_nativeCreate(
     env: JNIEnv,
@@ -55,30 +49,4 @@ pub extern "system" fn Java_com_exonum_binding_time_TimeSchemaProxy_nativeFree(
     schema_handle: Handle,
 ) {
     utils::drop_handle::<SchemaType>(&env, schema_handle);
-}
-
-/// Returns the height of the latest committed block. Throws `java.lang.RuntimeException` if the
-/// "genesis block" has not been created yet.
-#[no_mangle]
-pub extern "system" fn Java_com_exonum_binding_time_TimeSchemaProxy_nativeGetStateHashes(
-    env: JNIEnv,
-    _: JClass,
-    schema_handle: Handle,
-) -> jobjectArray {
-    let result = panic::catch_unwind(|| {
-        let val = match utils::cast_handle::<SchemaType>(schema_handle) {
-            SchemaType::SnapshotSchema(schema) => schema.state_hash(),
-            SchemaType::ForkSchema(schema) => schema.state_hash(),
-        };
-
-        let java_hashes_array =
-            env.new_object_array(val.len() as jsize, BYTE_ARRAY, JObject::null())?;
-        for (i, hash) in val.into_iter().enumerate() {
-            let java_hash = env.byte_array_from_slice(hash.as_ref())?.into();
-            env.set_object_array_element(java_hashes_array, i as jsize, java_hash)?;
-            env.delete_local_ref(java_hash)?;
-        }
-        Ok(java_hashes_array)
-    });
-    utils::unwrap_exc_or(&env, result, ptr::null_mut())
 }

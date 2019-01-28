@@ -71,15 +71,12 @@ public class TimeSchemaProxy implements TimeSchema {
 
   @Override
   public List<HashCode> getStateHashes() {
-    // TODO: produce a List from the result of .nativeGetStateHashes()
     return Collections.emptyList();
   }
 
   private static native long nativeCreate(long viewNativeHandle);
 
   private static native void nativeFree(long nativeHandle);
-
-  private static native byte[][] nativeGetStateHashes(long viewNativeHandle);
 
   /**
    * Mapping for Exonum time indexes by name.
