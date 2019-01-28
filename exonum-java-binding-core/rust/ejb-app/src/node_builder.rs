@@ -1,6 +1,6 @@
 use exonum_btc_anchoring::ServiceFactory as BtcAnchoringServiceFactory;
 use exonum_configuration::ServiceFactory as ConfigurationServiceFactory;
-use exonum_time::TimeServiceFactory as TimeServiceFactory;
+use exonum_time::TimeServiceFactory;
 use java_bindings::exonum::helpers::fabric::{self, ServiceFactory};
 use java_bindings::JavaServiceFactory;
 use toml;

@@ -12,9 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use exonum::{
-    storage::{Fork, Snapshot},
-};
+use exonum::storage::{Fork, Snapshot};
 use exonum_time::schema::TimeSchema;
 use jni::{
     objects::{JClass, JObject},
@@ -73,7 +71,8 @@ pub extern "system" fn Java_com_exonum_binding_time_TimeSchemaProxy_nativeGetSta
             SchemaType::ForkSchema(schema) => schema.state_hash(),
         };
 
-        let java_hashes_array = env.new_object_array(val.len() as jsize, BYTE_ARRAY, JObject::null())?;
+        let java_hashes_array =
+            env.new_object_array(val.len() as jsize, BYTE_ARRAY, JObject::null())?;
         for (i, hash) in val.into_iter().enumerate() {
             let java_hash = env.byte_array_from_slice(hash.as_ref())?.into();
             env.set_object_array_element(java_hashes_array, i as jsize, java_hash)?;
