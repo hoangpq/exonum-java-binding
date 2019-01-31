@@ -17,18 +17,12 @@
 package com.exonum.binding.time;
 
 import com.exonum.binding.common.crypto.PublicKey;
-import com.exonum.binding.common.hash.HashCode;
 import com.exonum.binding.common.serialization.Serializer;
 import com.exonum.binding.common.serialization.StandardSerializers;
-import com.exonum.binding.proxy.Cleaner;
-import com.exonum.binding.proxy.NativeHandle;
-import com.exonum.binding.proxy.ProxyDestructor;
 import com.exonum.binding.storage.database.View;
 import com.exonum.binding.storage.indices.EntryIndexProxy;
 import com.exonum.binding.storage.indices.ProofMapIndexProxy;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import java.time.ZonedDateTime;
-import java.util.List;
 
 public class TimeSchemaProxy implements TimeSchema {
 
@@ -45,13 +39,6 @@ public class TimeSchemaProxy implements TimeSchema {
    * Constructs a schema proxy for a given dbView.
    */
   static TimeSchemaProxy newInstance(View dbView) {
-    long nativePointer = nativeCreate(dbView.getViewNativeHandle());
-    NativeHandle nativeHandle = new NativeHandle(nativePointer);
-
-    Cleaner cleaner = dbView.getCleaner();
-    ProxyDestructor.newRegistered(cleaner, nativeHandle, TimeSchemaProxy.class,
-        TimeSchemaProxy::nativeFree);
-
     return new TimeSchemaProxy(dbView);
   }
 
@@ -65,15 +52,6 @@ public class TimeSchemaProxy implements TimeSchema {
     return ProofMapIndexProxy.newInstance(TimeIndex.VALIDATORS_TIMES, dbView, PUBLIC_KEY_SERIALIZER,
         ZONED_DATE_TIME_SERIALIZER);
   }
-
-  @Override
-  public List<HashCode> getStateHashes() {
-    throw new NotImplementedException();
-  }
-
-  private static native long nativeCreate(long viewNativeHandle);
-
-  private static native void nativeFree(long nativeHandle);
 
   /**
    * Mapping for Exonum time indexes by name.

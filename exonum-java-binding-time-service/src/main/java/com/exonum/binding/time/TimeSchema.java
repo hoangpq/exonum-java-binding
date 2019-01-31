@@ -17,20 +17,23 @@
 package com.exonum.binding.time;
 
 import com.exonum.binding.common.crypto.PublicKey;
-import com.exonum.binding.common.hash.HashCode;
-import com.exonum.binding.service.Schema;
 import com.exonum.binding.storage.indices.EntryIndexProxy;
 import com.exonum.binding.storage.indices.ProofMapIndexProxy;
 import java.time.ZonedDateTime;
-import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * Exonum time service database schema.
  */
-public interface TimeSchema extends Schema {
+public interface TimeSchema {
 
   /**
-   * Returns stored time.
+   * Consolidated time output by the service, which can be used by other business logic on the
+   * blockchain.
+   * At the time when a new blockchain is launched, the consolidated time is unknown until the
+   * transactions from at least 2f + 1 validator nodes are processed.
+   *
+   * @throws NoSuchElementException if there is no consolidated time
    */
   EntryIndexProxy<ZonedDateTime> getTime();
 
@@ -38,7 +41,4 @@ public interface TimeSchema extends Schema {
    * Returns the table that stores time for every validator.
    */
   ProofMapIndexProxy<PublicKey, ZonedDateTime> getValidatorsTimes();
-
-  @Override
-  List<HashCode> getStateHashes();
 }

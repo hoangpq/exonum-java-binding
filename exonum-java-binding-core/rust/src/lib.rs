@@ -24,7 +24,6 @@
 #![allow(non_snake_case)]
 
 pub extern crate exonum;
-extern crate exonum_time;
 extern crate failure;
 pub extern crate jni;
 extern crate toml;

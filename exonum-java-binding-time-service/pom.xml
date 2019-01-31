@@ -1,73 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+  <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>com.exonum.binding</groupId>
-        <artifactId>exonum-java-binding-parent</artifactId>
-        <version>0.4-SNAPSHOT</version>
-    </parent>
+  <parent>
+    <groupId>com.exonum.binding</groupId>
+    <artifactId>exonum-java-binding-parent</artifactId>
+    <version>0.4-SNAPSHOT</version>
+  </parent>
 
-    <artifactId>exonum-java-binding-time-service</artifactId>
-    <packaging>jar</packaging>
+  <artifactId>exonum-java-binding-time-service</artifactId>
+  <packaging>jar</packaging>
 
-    <name>Exonum Time Service</name>
-    <url>https://exonum.com/doc/version/latest/advanced/time/</url>
+  <name>Exonum Time Service</name>
+  <url>https://exonum.com/doc/version/latest/advanced/time/</url>
 
-    <properties>
-        <ejb-core.nativeLibPath>${project.parent.basedir}/exonum-java-binding-core/rust/target/debug
-        </ejb-core.nativeLibPath>
-        <junit.jupiter.version>5.3.2</junit.jupiter.version>
-    </properties>
+  <properties>
+    <ejb-core.nativeLibPath>${project.parent.basedir}/exonum-java-binding-core/rust/target/debug
+    </ejb-core.nativeLibPath>
+    <junit.jupiter.version>5.3.2</junit.jupiter.version>
+  </properties>
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>com.exonum.binding</groupId>
-                <artifactId>exonum-java-binding-bom</artifactId>
-                <version>${project.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-    <dependencies>
-        <dependency>
-            <groupId>com.exonum.binding</groupId>
-            <artifactId>exonum-java-binding-core</artifactId>
-        </dependency>
+  <dependencies>
+    <dependency>
+      <groupId>com.exonum.binding</groupId>
+      <artifactId>exonum-java-binding-core</artifactId>
+      <version>${project.version}</version>
+    </dependency>
 
-        <dependency>
-            <groupId>org.assertj</groupId>
-            <artifactId>assertj-core</artifactId>
-            <scope>test</scope>
-        </dependency>
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <scope>test</scope>
+    </dependency>
 
-        <dependency>
-            <groupId>com.exonum.binding</groupId>
-            <artifactId>exonum-java-testing</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
+    <dependency>
+      <groupId>com.exonum.binding</groupId>
+      <artifactId>exonum-java-testing</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-            </plugin>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+      </plugin>
 
-            <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <argLine>
-                        ${jacoco.args}
-                        -Djava.library.path=${ejb-core.nativeLibPath}
-                        ${java.vm.assertionFlag}
-                    </argLine>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <argLine>
+            ${jacoco.args}
+            -Djava.library.path=${ejb-core.nativeLibPath}
+            ${java.vm.assertionFlag}
+          </argLine>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 </project>

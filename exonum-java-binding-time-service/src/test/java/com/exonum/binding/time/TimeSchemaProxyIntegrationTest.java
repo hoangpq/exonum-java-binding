@@ -47,7 +47,8 @@ class TimeSchemaProxyIntegrationTest {
   }
 
   private static void assertSchema(Consumer<TimeSchemaProxy> assertion) {
-    try (MemoryDb db = MemoryDb.newInstance(); Cleaner cleaner = new Cleaner()) {
+    try (MemoryDb db = MemoryDb.newInstance();
+         Cleaner cleaner = new Cleaner()) {
       Snapshot view = db.createSnapshot(cleaner);
       assertion.accept(TimeSchemaProxy.newInstance(view));
     } catch (CloseFailuresException e) {
