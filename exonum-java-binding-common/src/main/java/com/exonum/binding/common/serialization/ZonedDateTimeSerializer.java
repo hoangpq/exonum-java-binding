@@ -17,22 +17,43 @@
 
 package com.exonum.binding.common.serialization;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import static com.exonum.binding.common.serialization.SerializationUtils.checkLength;
+
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.time.Instant;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 
 enum ZonedDateTimeSerializer implements Serializer<ZonedDateTime> {
   INSTANCE;
 
+  static private final int BYTE_BUFFER_CAPACITY = Long.BYTES + Integer.BYTES;
+
   @Override
   public byte[] toBytes(ZonedDateTime value) {
-    // TODO: implement
-    throw new NotImplementedException();
+    long seconds = value.toEpochSecond();
+    int nanos = value.getNano();
+    ByteBuffer buffer = ByteBuffer.allocate(BYTE_BUFFER_CAPACITY)
+        .order(ByteOrder.LITTLE_ENDIAN);
+    buffer.putLong(seconds);
+    buffer.putInt(nanos);
+    return buffer.array();
   }
 
   @Override
   public ZonedDateTime fromBytes(byte[] serializedValue) {
-    // TODO: implement
-    throw new NotImplementedException();
+    checkLength(serializedValue, BYTE_BUFFER_CAPACITY);
+
+    ByteBuffer buffer = ByteBuffer.wrap(serializedValue)
+        .order(ByteOrder.LITTLE_ENDIAN);
+    return retrieveZdtFromBuffer(buffer);
   }
 
+  private ZonedDateTime retrieveZdtFromBuffer(ByteBuffer buffer) {
+    long seconds = buffer.getLong();
+    int nanos = buffer.getInt();
+    Instant instant = Instant.ofEpochSecond(seconds, nanos);
+    return ZonedDateTime.ofInstant(instant, ZoneOffset.UTC);
+  }
 }

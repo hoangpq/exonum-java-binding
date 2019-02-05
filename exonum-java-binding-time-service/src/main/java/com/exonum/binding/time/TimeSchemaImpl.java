@@ -24,22 +24,22 @@ import com.exonum.binding.storage.indices.EntryIndexProxy;
 import com.exonum.binding.storage.indices.ProofMapIndexProxy;
 import java.time.ZonedDateTime;
 
-public class TimeSchemaProxy implements TimeSchema {
+public class TimeSchemaImpl implements TimeSchema {
 
   private static final Serializer<PublicKey> PUBLIC_KEY_SERIALIZER = StandardSerializers.publicKey();
   private static final Serializer<ZonedDateTime> ZONED_DATE_TIME_SERIALIZER = StandardSerializers.zonedDateTime();
 
   private final View dbView;
 
-  private TimeSchemaProxy(View dbView) {
+  private TimeSchemaImpl(View dbView) {
     this.dbView = dbView;
   }
 
   /**
-   * Constructs a schema proxy for a given dbView.
+   * Constructs a time schema for a given dbView.
    */
-  static TimeSchemaProxy newInstance(View dbView) {
-    return new TimeSchemaProxy(dbView);
+  static TimeSchemaImpl newInstance(View dbView) {
+    return new TimeSchemaImpl(dbView);
   }
 
   @Override

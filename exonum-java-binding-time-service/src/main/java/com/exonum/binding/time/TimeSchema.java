@@ -20,20 +20,21 @@ import com.exonum.binding.common.crypto.PublicKey;
 import com.exonum.binding.storage.indices.EntryIndexProxy;
 import com.exonum.binding.storage.indices.ProofMapIndexProxy;
 import java.time.ZonedDateTime;
-import java.util.NoSuchElementException;
 
 /**
  * Exonum time service database schema.
+ *
+ * @see <a href="https://exonum.com/doc/version/latest/advanced/time/">Time oracle documentation</a>
  */
 public interface TimeSchema {
 
   /**
-   * Consolidated time output by the service, which can be used by other business logic on the
-   * blockchain.
-   * At the time when a new blockchain is launched, the consolidated time is unknown until the
-   * transactions from at least 2f + 1 validator nodes are processed.
+   * Returns consolidated time output by the service, which can be used by other business logic on
+   * the blockchain.
    *
-   * @throws NoSuchElementException if there is no consolidated time
+   * <p>At the time when a new blockchain is launched, the consolidated time is unknown until the
+   * transactions from at least two thirds of validator nodes are processed. In that case the
+   * result will not contain a value.
    */
   EntryIndexProxy<ZonedDateTime> getTime();
 
