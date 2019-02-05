@@ -28,7 +28,7 @@ import java.time.ZonedDateTime;
 enum ZonedDateTimeSerializer implements Serializer<ZonedDateTime> {
   INSTANCE;
 
-  static private final int BYTE_BUFFER_CAPACITY = Long.BYTES + Integer.BYTES;
+  private static final int BYTE_BUFFER_CAPACITY = Long.BYTES + Integer.BYTES;
 
   @Override
   public byte[] toBytes(ZonedDateTime value) {

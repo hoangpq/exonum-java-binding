@@ -32,11 +32,17 @@ public class TimeSchemaImpl implements TimeSchema {
   private final View dbView;
 
   private TimeSchemaImpl(View dbView) {
+    checkIfEnabled();
     this.dbView = dbView;
   }
 
   /**
    * Constructs a time schema for a given dbView.
+   *
+   * <p>Won't be constructed unless time service is enabled. To enable time service, put 'time'
+   * into 'ejb_app_services.toml' file.
+   *
+   * @throws IllegalStateException if time service is not enabled
    */
   static TimeSchemaImpl newInstance(View dbView) {
     return new TimeSchemaImpl(dbView);
@@ -52,6 +58,15 @@ public class TimeSchemaImpl implements TimeSchema {
     return ProofMapIndexProxy.newInstance(TimeIndex.VALIDATORS_TIMES, dbView, PUBLIC_KEY_SERIALIZER,
         ZONED_DATE_TIME_SERIALIZER);
   }
+
+  private void checkIfEnabled() {
+    if (!isTimeServiceEnabled()) {
+      throw new IllegalStateException("Time service is not enabled. To enable it, put 'time' into " +
+          "'ejb_app_services.toml' file.");
+    }
+  }
+
+  native boolean isTimeServiceEnabled();
 
   /**
    * Mapping for Exonum time indexes by name.
