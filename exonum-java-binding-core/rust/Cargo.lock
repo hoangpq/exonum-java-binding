@@ -1489,6 +1489,7 @@ dependencies = [
  "exonum 0.10.3 (registry+https://github.com/rust-lang/crates.io-index)",
  "exonum-time 0.9.3 (registry+https://github.com/rust-lang/crates.io-index)",
  "failure 0.1.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "futures 0.1.25 (registry+https://github.com/rust-lang/crates.io-index)",
  "jni 0.10.1 (git+https://github.com/alexander-irbis/jni-rs?branch=clone-jnienv)",
  "lazy_static 1.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log 0.4.6 (registry+https://github.com/rust-lang/crates.io-index)",
