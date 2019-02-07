@@ -29,6 +29,7 @@ import com.exonum.binding.util.LibraryLoader;
 import java.util.function.Consumer;
 import org.junit.jupiter.api.Test;
 
+//TODO: fix after native part implementation
 @RequiresNativeLibrary
 class TimeSchemaProxyIntegrationTest {
 
