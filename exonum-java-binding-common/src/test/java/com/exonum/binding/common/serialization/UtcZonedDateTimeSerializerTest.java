@@ -19,8 +19,10 @@ package com.exonum.binding.common.serialization;
 
 import static com.exonum.binding.common.serialization.StandardSerializersTest.invalidBytesValueTest;
 import static com.exonum.binding.common.serialization.StandardSerializersTest.roundTripTest;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.exonum.binding.test.Bytes;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.stream.Stream;
@@ -28,8 +30,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-class ZonedDateTimeSerializerTest {
-  private Serializer<ZonedDateTime> serializer = ZonedDateTimeSerializer.INSTANCE;
+class UtcZonedDateTimeSerializerTest {
+
+  private Serializer<ZonedDateTime> serializer = UtcZonedDateTimeSerializer.INSTANCE;
 
   @ParameterizedTest
   @MethodSource("testSource")
@@ -41,6 +44,12 @@ class ZonedDateTimeSerializerTest {
   void deserializeInvalidValue() {
     byte[] invalidValue = Bytes.bytes();
     invalidBytesValueTest(invalidValue, serializer);
+  }
+
+  @Test
+  void serializeNonUtcValue() {
+    ZonedDateTime value = ZonedDateTime.now(ZoneId.of("Europe/Amsterdam"));
+    assertThrows(IllegalArgumentException.class, () -> serializer.toBytes(value));
   }
 
   private static Stream<ZonedDateTime> testSource() {

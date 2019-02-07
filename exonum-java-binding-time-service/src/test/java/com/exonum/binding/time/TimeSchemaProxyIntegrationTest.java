@@ -30,7 +30,7 @@ import java.util.function.Consumer;
 import org.junit.jupiter.api.Test;
 
 @RequiresNativeLibrary
-class TimeSchemaImplIntegrationTest {
+class TimeSchemaProxyIntegrationTest {
 
   static {
     LibraryLoader.load();
@@ -46,11 +46,11 @@ class TimeSchemaImplIntegrationTest {
     assertSchema((schema) -> assertFalse(schema.getValidatorsTimes().entries().hasNext()));
   }
 
-  private static void assertSchema(Consumer<TimeSchemaImpl> assertion) {
+  private static void assertSchema(Consumer<TimeSchemaProxy> assertion) {
     try (MemoryDb db = MemoryDb.newInstance();
          Cleaner cleaner = new Cleaner()) {
       Snapshot view = db.createSnapshot(cleaner);
-      assertion.accept(TimeSchemaImpl.newInstance(view));
+      assertion.accept(TimeSchemaProxy.newInstance(view));
     } catch (CloseFailuresException e) {
       fail(e.getLocalizedMessage());
     }

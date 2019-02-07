@@ -16,6 +16,8 @@
 
 package com.exonum.binding.time;
 
+import static com.google.common.base.Preconditions.checkState;
+
 import com.exonum.binding.common.crypto.PublicKey;
 import com.exonum.binding.common.serialization.Serializer;
 import com.exonum.binding.common.serialization.StandardSerializers;
@@ -24,14 +26,14 @@ import com.exonum.binding.storage.indices.EntryIndexProxy;
 import com.exonum.binding.storage.indices.ProofMapIndexProxy;
 import java.time.ZonedDateTime;
 
-public class TimeSchemaImpl implements TimeSchema {
+public class TimeSchemaProxy implements TimeSchema {
 
   private static final Serializer<PublicKey> PUBLIC_KEY_SERIALIZER = StandardSerializers.publicKey();
   private static final Serializer<ZonedDateTime> ZONED_DATE_TIME_SERIALIZER = StandardSerializers.zonedDateTime();
 
   private final View dbView;
 
-  private TimeSchemaImpl(View dbView) {
+  private TimeSchemaProxy(View dbView) {
     checkIfEnabled();
     this.dbView = dbView;
   }
@@ -44,8 +46,8 @@ public class TimeSchemaImpl implements TimeSchema {
    *
    * @throws IllegalStateException if time service is not enabled
    */
-  static TimeSchemaImpl newInstance(View dbView) {
-    return new TimeSchemaImpl(dbView);
+  static TimeSchemaProxy newInstance(View dbView) {
+    return new TimeSchemaProxy(dbView);
   }
 
   @Override
@@ -60,13 +62,11 @@ public class TimeSchemaImpl implements TimeSchema {
   }
 
   private void checkIfEnabled() {
-    if (!isTimeServiceEnabled()) {
-      throw new IllegalStateException("Time service is not enabled. To enable it, put 'time' into " +
-          "'ejb_app_services.toml' file.");
-    }
+    checkState(isTimeServiceEnabled(), "Time service is not enabled. To enable it, put 'time' into " +
+        "'ejb_app_services.toml' file.");
   }
 
-  native boolean isTimeServiceEnabled();
+  private native boolean isTimeServiceEnabled();
 
   /**
    * Mapping for Exonum time indexes by name.

@@ -18,6 +18,7 @@
 package com.exonum.binding.common.serialization;
 
 import static com.exonum.binding.common.serialization.SerializationUtils.checkLength;
+import static com.google.common.base.Preconditions.checkArgument;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -25,16 +26,17 @@ import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 
-enum ZonedDateTimeSerializer implements Serializer<ZonedDateTime> {
+enum UtcZonedDateTimeSerializer implements Serializer<ZonedDateTime> {
   INSTANCE;
 
-  private static final int BYTE_BUFFER_CAPACITY = Long.BYTES + Integer.BYTES;
+  private static final int SERIALIZED_ZDT_SIZE = Long.BYTES + Integer.BYTES;
 
   @Override
   public byte[] toBytes(ZonedDateTime value) {
+    checkArgument(value.getZone() == ZoneOffset.UTC, "Serialized ZonedDateTime value should be in UTC");
     long seconds = value.toEpochSecond();
     int nanos = value.getNano();
-    ByteBuffer buffer = ByteBuffer.allocate(BYTE_BUFFER_CAPACITY)
+    ByteBuffer buffer = ByteBuffer.allocate(SERIALIZED_ZDT_SIZE)
         .order(ByteOrder.LITTLE_ENDIAN);
     buffer.putLong(seconds);
     buffer.putInt(nanos);
@@ -43,7 +45,7 @@ enum ZonedDateTimeSerializer implements Serializer<ZonedDateTime> {
 
   @Override
   public ZonedDateTime fromBytes(byte[] serializedValue) {
-    checkLength(serializedValue, BYTE_BUFFER_CAPACITY);
+    checkLength(serializedValue, SERIALIZED_ZDT_SIZE);
 
     ByteBuffer buffer = ByteBuffer.wrap(serializedValue)
         .order(ByteOrder.LITTLE_ENDIAN);

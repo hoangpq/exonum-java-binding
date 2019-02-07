@@ -153,7 +153,7 @@ public final class StandardSerializers {
    * Returns a serializer of ZonedDateTime instances.
    */
   public static Serializer<ZonedDateTime> zonedDateTime() {
-    return ZonedDateTimeSerializer.INSTANCE;
+    return UtcZonedDateTimeSerializer.INSTANCE;
   }
 
   /**
