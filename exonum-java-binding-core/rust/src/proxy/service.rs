@@ -30,7 +30,7 @@ use proxy::node::NodeContext;
 use storage::View;
 use utils::{
     check_error_on_exception, convert_to_hash, convert_to_string, jni_cache::service_adapter,
-    panic_on_exception, to_handle, unwrap_jni, time_service,
+    panic_on_exception, time_service, to_handle, unwrap_jni,
 };
 use {JniExecutor, MainExecutor, TransactionProxy};
 
