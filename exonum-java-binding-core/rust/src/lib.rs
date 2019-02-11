@@ -40,6 +40,9 @@ pub extern crate serde_json;
 #[macro_use]
 extern crate lazy_static;
 
+#[cfg(test)]
+extern crate tempfile;
+
 mod error;
 mod init;
 mod proxy;

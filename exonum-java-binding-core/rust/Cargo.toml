@@ -31,4 +31,4 @@ serde_json = "1.0.38"
 rpath = true
 
 [dev-dependencies]
-futures = "0.1"
+tempfile = "3"
