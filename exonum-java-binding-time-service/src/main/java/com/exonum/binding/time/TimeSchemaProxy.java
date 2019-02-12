@@ -24,7 +24,6 @@ import com.exonum.binding.common.serialization.StandardSerializers;
 import com.exonum.binding.storage.database.View;
 import com.exonum.binding.storage.indices.EntryIndexProxy;
 import com.exonum.binding.storage.indices.ProofMapIndexProxy;
-import com.exonum.binding.time.serialization.UtcZonedDateTimeSerializer;
 
 import java.time.ZonedDateTime;
 

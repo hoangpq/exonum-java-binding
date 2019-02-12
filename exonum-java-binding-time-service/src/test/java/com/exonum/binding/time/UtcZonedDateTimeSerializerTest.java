@@ -15,7 +15,11 @@
  *
  */
 
-package com.exonum.binding.time.serialization;
+package com.exonum.binding.time;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.exonum.binding.common.serialization.Serializer;
 import com.exonum.binding.test.Bytes;
@@ -26,10 +30,6 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.stream.Stream;
-
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class UtcZonedDateTimeSerializerTest {
 

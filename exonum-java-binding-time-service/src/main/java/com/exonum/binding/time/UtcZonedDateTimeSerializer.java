@@ -15,7 +15,7 @@
  *
  */
 
-package com.exonum.binding.time.serialization;
+package com.exonum.binding.time;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
@@ -29,7 +29,7 @@ import java.time.ZonedDateTime;
 /**
  * ZonedDateTime serializer. Only serializes values with UTC zones, throws an exception otherwise.
  */
-public enum UtcZonedDateTimeSerializer implements Serializer<ZonedDateTime> {
+enum UtcZonedDateTimeSerializer implements Serializer<ZonedDateTime> {
   INSTANCE;
 
   private static final int SERIALIZED_DATE_TIME_SIZE = Long.BYTES + Integer.BYTES;
@@ -37,7 +37,7 @@ public enum UtcZonedDateTimeSerializer implements Serializer<ZonedDateTime> {
   @Override
   public byte[] toBytes(ZonedDateTime value) {
     checkArgument(value.getZone() == ZoneOffset.UTC, "ZonedDateTime value should be in UTC, but was %s",
-        value.getZone().toString());
+        value.getZone());
     long seconds = value.toEpochSecond();
     int nanos = value.getNano();
     ByteBuffer buffer = ByteBuffer.allocate(SERIALIZED_DATE_TIME_SIZE)
