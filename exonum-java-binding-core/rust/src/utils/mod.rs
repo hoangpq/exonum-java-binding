@@ -37,6 +37,6 @@ pub use self::jni::{get_class_name, get_exception_message};
 pub use self::pair_iter::PairIter;
 pub use self::resource_manager::known_handles;
 pub use self::services::{
-    is_service_enabled, load_enabled_services, BTC_ANCHORING_SERVICE, CONFIGURATION_SERVICE,
-    EJB_SERVICE, PATH_TO_SERVICES_TO_ENABLE, TIME_SERVICE,
+    is_service_enabled_in_config_file, load_enabled_services, BTC_ANCHORING_SERVICE,
+    CONFIGURATION_SERVICE, EJB_SERVICE, PATH_TO_SERVICES_TO_ENABLE, TIME_SERVICE,
 };

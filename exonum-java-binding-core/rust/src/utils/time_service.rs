@@ -16,12 +16,19 @@ use jni::objects::JClass;
 use jni::sys::jboolean;
 use jni::JNIEnv;
 
-use utils::{is_service_enabled, TIME_SERVICE};
+use utils::{is_service_enabled_in_config_file, PATH_TO_SERVICES_TO_ENABLE, TIME_SERVICE};
+
+lazy_static! {
+    static ref IS_TIME_SERVICE_ENABLED: jboolean =
+        is_service_enabled_in_config_file(TIME_SERVICE, PATH_TO_SERVICES_TO_ENABLE).into();
+}
 
 #[no_mangle]
 pub extern "system" fn Java_com_exonum_binding_time_TimeSchemaProxy_isTimeServiceEnabled(
     _: JNIEnv,
     _: JClass,
 ) -> jboolean {
-    is_service_enabled(TIME_SERVICE).into()
+    // TODO: For the moment we're just checking for the service's name presence in the configuration
+    // file. As soon as we have dynamic services implemented this checking should happen in runtime.
+    *IS_TIME_SERVICE_ENABLED
 }
