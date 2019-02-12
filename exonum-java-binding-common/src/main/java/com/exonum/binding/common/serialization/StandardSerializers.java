@@ -23,8 +23,6 @@ import com.exonum.binding.common.message.TransactionMessage;
 import com.google.protobuf.CodedOutputStream;
 import com.google.protobuf.MessageLite;
 
-import java.time.ZonedDateTime;
-
 /**
  * A collection of pre-defined serializers.
  */
@@ -147,13 +145,6 @@ public final class StandardSerializers {
    */
   public static Serializer<TransactionMessage> transactionMessage() {
     return TransactionMessageSerializer.INSTANCE;
-  }
-
-  /**
-   * Returns a serializer of ZonedDateTime instances.
-   */
-  public static Serializer<ZonedDateTime> zonedDateTime() {
-    return UtcZonedDateTimeSerializer.INSTANCE;
   }
 
   /**

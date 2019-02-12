@@ -29,7 +29,8 @@ import com.exonum.binding.util.LibraryLoader;
 import java.util.function.Consumer;
 import org.junit.jupiter.api.Test;
 
-//TODO: fix after native part implementation
+//TODO: remove and refactor after native part (time service activation check) is implemented
+//@Disabled
 @RequiresNativeLibrary
 class TimeSchemaProxyIntegrationTest {
 

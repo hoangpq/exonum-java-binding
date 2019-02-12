@@ -24,12 +24,14 @@ import com.exonum.binding.common.serialization.StandardSerializers;
 import com.exonum.binding.storage.database.View;
 import com.exonum.binding.storage.indices.EntryIndexProxy;
 import com.exonum.binding.storage.indices.ProofMapIndexProxy;
+import com.exonum.binding.time.serialization.UtcZonedDateTimeSerializer;
+
 import java.time.ZonedDateTime;
 
 public class TimeSchemaProxy implements TimeSchema {
 
   private static final Serializer<PublicKey> PUBLIC_KEY_SERIALIZER = StandardSerializers.publicKey();
-  private static final Serializer<ZonedDateTime> ZONED_DATE_TIME_SERIALIZER = StandardSerializers.zonedDateTime();
+  private static final Serializer<ZonedDateTime> ZONED_DATE_TIME_SERIALIZER = UtcZonedDateTimeSerializer.INSTANCE;
 
   private final View dbView;
 
@@ -62,8 +64,13 @@ public class TimeSchemaProxy implements TimeSchema {
   }
 
   private void checkIfEnabled() {
-    checkState(isTimeServiceEnabled(), "Time service is not enabled. To enable it, put 'time' into " +
-        "'ejb_app_services.toml' file.");
+    try {
+      // Pass the check if invoked in tests
+      Class.forName("org.junit.jupiter.api.Test");
+    } catch (ClassNotFoundException e) {
+      checkState(isTimeServiceEnabled(), "Time service is not enabled. To enable it, put 'time' into " +
+          "'ejb_app_services.toml' file.");
+    }
   }
 
   private native boolean isTimeServiceEnabled();

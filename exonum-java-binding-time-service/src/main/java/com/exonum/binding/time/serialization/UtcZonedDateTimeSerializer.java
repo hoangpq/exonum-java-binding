@@ -15,28 +15,32 @@
  *
  */
 
-package com.exonum.binding.common.serialization;
+package com.exonum.binding.time.serialization;
 
-import static com.exonum.binding.common.serialization.SerializationUtils.checkLength;
 import static com.google.common.base.Preconditions.checkArgument;
 
+import com.exonum.binding.common.serialization.Serializer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 
-enum UtcZonedDateTimeSerializer implements Serializer<ZonedDateTime> {
+/**
+ * ZonedDateTime serializer. Only serializes values with UTC zones, throws an exception otherwise.
+ */
+public enum UtcZonedDateTimeSerializer implements Serializer<ZonedDateTime> {
   INSTANCE;
 
-  private static final int SERIALIZED_ZDT_SIZE = Long.BYTES + Integer.BYTES;
+  private static final int SERIALIZED_DATE_TIME_SIZE = Long.BYTES + Integer.BYTES;
 
   @Override
   public byte[] toBytes(ZonedDateTime value) {
-    checkArgument(value.getZone() == ZoneOffset.UTC, "Serialized ZonedDateTime value should be in UTC");
+    checkArgument(value.getZone() == ZoneOffset.UTC, "ZonedDateTime value should be in UTC, but was %s",
+        value.getZone().toString());
     long seconds = value.toEpochSecond();
     int nanos = value.getNano();
-    ByteBuffer buffer = ByteBuffer.allocate(SERIALIZED_ZDT_SIZE)
+    ByteBuffer buffer = ByteBuffer.allocate(SERIALIZED_DATE_TIME_SIZE)
         .order(ByteOrder.LITTLE_ENDIAN);
     buffer.putLong(seconds);
     buffer.putInt(nanos);
@@ -45,7 +49,8 @@ enum UtcZonedDateTimeSerializer implements Serializer<ZonedDateTime> {
 
   @Override
   public ZonedDateTime fromBytes(byte[] serializedValue) {
-    checkLength(serializedValue, SERIALIZED_ZDT_SIZE);
+    checkArgument(serializedValue.length == SERIALIZED_DATE_TIME_SIZE,
+        "Expected an array of size %s, but was %s", SERIALIZED_DATE_TIME_SIZE, serializedValue.length);
 
     ByteBuffer buffer = ByteBuffer.wrap(serializedValue)
         .order(ByteOrder.LITTLE_ENDIAN);

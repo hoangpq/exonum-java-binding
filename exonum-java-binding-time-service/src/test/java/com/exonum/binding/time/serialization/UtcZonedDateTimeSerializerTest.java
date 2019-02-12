@@ -15,20 +15,21 @@
  *
  */
 
-package com.exonum.binding.common.serialization;
+package com.exonum.binding.time.serialization;
 
-import static com.exonum.binding.common.serialization.StandardSerializersTest.invalidBytesValueTest;
-import static com.exonum.binding.common.serialization.StandardSerializersTest.roundTripTest;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
+import com.exonum.binding.common.serialization.Serializer;
 import com.exonum.binding.test.Bytes;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.stream.Stream;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class UtcZonedDateTimeSerializerTest {
 
@@ -37,13 +38,16 @@ class UtcZonedDateTimeSerializerTest {
   @ParameterizedTest
   @MethodSource("testSource")
   void roundTrip(ZonedDateTime key) {
-    roundTripTest(key, serializer);
+    byte[] bytes = serializer.toBytes(key);
+    ZonedDateTime actual = serializer.fromBytes(bytes);
+
+    assertThat(actual, equalTo(key));
   }
 
   @Test
   void deserializeInvalidValue() {
     byte[] invalidValue = Bytes.bytes();
-    invalidBytesValueTest(invalidValue, serializer);
+    assertThrows(IllegalArgumentException.class, () -> serializer.fromBytes(invalidValue));
   }
 
   @Test
