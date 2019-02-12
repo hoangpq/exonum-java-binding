@@ -39,20 +39,10 @@ pub fn load_enabled_services<P: AsRef<Path>>(path: P) -> Result<HashSet<String>>
     Ok(services)
 }
 
-/// Determines whether particular service name is defined in the services configuration file.
-/// TODO: For the moment we're just checking for the service's name presence in the configuration
-/// file. As soon as we have dynamic services implemented this checking should happen in runtime.
-pub fn is_service_enabled(service_name: &str) -> bool {
-    is_service_enabled_in_file(service_name, PATH_TO_SERVICES_TO_ENABLE)
-}
-
-fn is_service_enabled_in_file<P: AsRef<Path>>(service_name: &str, path: P) -> bool {
+/// Determines whether particular service name is defined in the specific TOML configuration file.
+pub fn is_service_enabled_in_config_file<P: AsRef<Path>>(service_name: &str, path: P) -> bool {
     load_enabled_services(path)
-        .map(|services| {
-            services
-                .iter()
-                .any(|service| service.trim() == service_name)
-        })
+        .map(|services| services.contains(service_name))
         .unwrap_or(false)
 }
 
@@ -61,12 +51,6 @@ mod tests {
     use super::*;
     use std::io::Write;
     use tempfile::{Builder, TempPath};
-
-    fn create_config(filename: &str, cfg: &str) -> TempPath {
-        let mut cfg_file = Builder::new().prefix(filename).tempfile().unwrap();
-        writeln!(cfg_file, "{}", cfg).unwrap();
-        cfg_file.into_temp_path()
-    }
 
     #[test]
     fn no_config() {
@@ -107,9 +91,21 @@ mod tests {
             "services = [\"ejb-service\", \"time\"]",
         );
 
-        assert!(is_service_enabled_in_file(EJB_SERVICE, &cfg));
-        assert!(!is_service_enabled_in_file(CONFIGURATION_SERVICE, &cfg));
-        assert!(!is_service_enabled_in_file(BTC_ANCHORING_SERVICE, &cfg));
-        assert!(is_service_enabled_in_file(TIME_SERVICE, &cfg));
+        assert!(is_service_enabled_in_config_file(EJB_SERVICE, &cfg));
+        assert!(!is_service_enabled_in_config_file(
+            CONFIGURATION_SERVICE,
+            &cfg
+        ));
+        assert!(!is_service_enabled_in_config_file(
+            BTC_ANCHORING_SERVICE,
+            &cfg
+        ));
+        assert!(is_service_enabled_in_config_file(TIME_SERVICE, &cfg));
+    }
+
+    fn create_config(filename: &str, cfg: &str) -> TempPath {
+        let mut cfg_file = Builder::new().prefix(filename).tempfile().unwrap();
+        writeln!(cfg_file, "{}", cfg).unwrap();
+        cfg_file.into_temp_path()
     }
 }
