@@ -18,24 +18,14 @@ use exonum_btc_anchoring::ServiceFactory as BtcAnchoringServiceFactory;
 use exonum_configuration::ServiceFactory as ConfigurationServiceFactory;
 use exonum_time::TimeServiceFactory;
 use java_bindings::exonum::helpers::fabric::{self, ServiceFactory};
+use java_bindings::utils::{
+    load_enabled_services, BTC_ANCHORING_SERVICE, CONFIGURATION_SERVICE, EJB_SERVICE,
+    PATH_TO_SERVICES_TO_ENABLE, TIME_SERVICE,
+};
 use java_bindings::JavaServiceFactory;
-use toml;
 
 use std::collections::{HashMap, HashSet};
-use std::fs::File;
-use std::io::Read;
 use std::path::Path;
-
-const PATH_TO_SERVICES_TO_ENABLE: &str = "ejb_app_services.toml";
-const CONFIGURATION_SERVICE: &str = "configuration";
-const BTC_ANCHORING_SERVICE: &str = "btc-anchoring";
-const TIME_SERVICE: &str = "time";
-const EJB_SERVICE: &str = "ejb-service";
-
-#[derive(Serialize, Deserialize)]
-struct ServicesToEnable {
-    services: HashSet<String>,
-}
 
 fn service_factories() -> HashMap<String, Box<ServiceFactory>> {
     let mut service_factories = HashMap::new();
@@ -61,17 +51,11 @@ fn service_factories() -> HashMap<String, Box<ServiceFactory>> {
 #[doc(hidden)]
 pub fn services_to_enable<P: AsRef<Path>>(path: P) -> HashSet<String> {
     // Return default list if config file not found.
-    let mut services = if let Ok(mut file) = File::open(path) {
-        let mut toml = String::new();
-        file.read_to_string(&mut toml).unwrap();
-        let ServicesToEnable { services } =
-            toml::from_str(&toml).expect("Invalid list of services to enable");
-        services
-    } else {
+    let mut services = load_enabled_services(path).unwrap_or_else(|_| {
         let mut services = HashSet::new();
         services.insert(CONFIGURATION_SERVICE.to_owned());
         services
-    };
+    });
 
     // Add EJB_SERVICE if it's missing
     services.insert(EJB_SERVICE.to_owned());
