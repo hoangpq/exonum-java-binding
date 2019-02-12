@@ -49,12 +49,9 @@ pub fn is_service_enabled(service_name: &str) -> bool {
 fn is_service_enabled_in_file<P: AsRef<Path>>(service_name: &str, path: P) -> bool {
     load_enabled_services(path)
         .map(|services| {
-            for service in services {
-                if service.trim() == service_name {
-                    return true;
-                }
-            }
-            return false;
+            services
+                .iter()
+                .any(|service| service.trim() == service_name)
         })
         .unwrap_or(false)
 }
