@@ -30,5 +30,6 @@ pub extern "system" fn Java_com_exonum_binding_time_TimeSchemaProxy_isTimeServic
 ) -> jboolean {
     // TODO: For the moment we're just checking for the service's name presence in the configuration
     // file. As soon as we have dynamic services implemented this checking should happen in runtime.
+    // See https://jira.bf.local/browse/ECR-2893
     *IS_TIME_SERVICE_ENABLED
 }
