@@ -29,8 +29,10 @@ import java.time.ZonedDateTime;
 
 public class TimeSchemaProxy implements TimeSchema {
 
-  private static final Serializer<PublicKey> PUBLIC_KEY_SERIALIZER = StandardSerializers.publicKey();
-  private static final Serializer<ZonedDateTime> ZONED_DATE_TIME_SERIALIZER = UtcZonedDateTimeSerializer.INSTANCE;
+  private static final Serializer<PublicKey> PUBLIC_KEY_SERIALIZER =
+      StandardSerializers.publicKey();
+  private static final Serializer<ZonedDateTime> ZONED_DATE_TIME_SERIALIZER =
+      UtcZonedDateTimeSerializer.INSTANCE;
 
   private final View dbView;
 
@@ -67,8 +69,8 @@ public class TimeSchemaProxy implements TimeSchema {
       // Pass the check if invoked in tests
       Class.forName("org.junit.jupiter.api.Test");
     } catch (ClassNotFoundException e) {
-      checkState(isTimeServiceEnabled(), "Time service is not enabled. To enable it, put 'time' into " +
-          "'ejb_app_services.toml' file.");
+      checkState(isTimeServiceEnabled(), "Time service is not enabled. To enable it, put 'time'" +
+          "into 'ejb_app_services.toml' file.");
     }
   }
 

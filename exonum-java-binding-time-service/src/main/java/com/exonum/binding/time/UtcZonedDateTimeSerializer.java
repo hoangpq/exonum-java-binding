@@ -36,7 +36,8 @@ enum UtcZonedDateTimeSerializer implements Serializer<ZonedDateTime> {
 
   @Override
   public byte[] toBytes(ZonedDateTime value) {
-    checkArgument(value.getZone() == ZoneOffset.UTC, "ZonedDateTime value should be in UTC, but was %s",
+    checkArgument(value.getZone() == ZoneOffset.UTC,
+        "ZonedDateTime value should be in UTC, but was %s",
         value.getZone());
     long seconds = value.toEpochSecond();
     int nanos = value.getNano();
@@ -50,7 +51,8 @@ enum UtcZonedDateTimeSerializer implements Serializer<ZonedDateTime> {
   @Override
   public ZonedDateTime fromBytes(byte[] serializedValue) {
     checkArgument(serializedValue.length == SERIALIZED_DATE_TIME_SIZE,
-        "Expected an array of size %s, but was %s", SERIALIZED_DATE_TIME_SIZE, serializedValue.length);
+        "Expected an array of size %s, but was %s", SERIALIZED_DATE_TIME_SIZE,
+        serializedValue.length);
 
     ByteBuffer buffer = ByteBuffer.wrap(serializedValue)
         .order(ByteOrder.LITTLE_ENDIAN);

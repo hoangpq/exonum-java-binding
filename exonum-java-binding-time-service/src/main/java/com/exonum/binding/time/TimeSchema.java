@@ -33,8 +33,8 @@ public interface TimeSchema {
    * the blockchain.
    *
    * <p>At the time when a new blockchain is launched, the consolidated time is unknown until the
-   * transactions from at least two thirds of validator nodes are processed. In that case the
-   * result will not contain a value.
+   * transactions from at least two thirds of validator nodes are processed. In that case the result
+   * will not contain a value.
    */
   EntryIndexProxy<ZonedDateTime> getTime();
 
