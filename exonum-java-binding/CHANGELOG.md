@@ -24,14 +24,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `--jvm-debug` command line argument that allows JDWP debugging of node. (#629)
 - Support of separated messages format Exonum v0.10. (#574)
 - `ListIndexProxy#stream` to enable stream processing of list elements. (#661)
-- Support of Time oracle.
-
-  To enable this service put `ejb_app_services.toml` file into EJB App's directory
-  with the following content:
-  ```toml
-  services = ["configuration", "time"]
-  ```
-  (#667)
+- Support of Time oracle. Instruction on how to enable built-in services can be found
+  [here](https://exonum.com/doc/version/0.4/get-started/java-binding/#built-in-services). (#667)
 
 ### Changed
 - `com.exonum.binding.storage.indices.MapEntry` moved to package
